@@ -3,8 +3,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Search, ShoppingBag, User, Calendar, MapPin, Sparkles, ChevronDown } from "lucide-react";
+import { Search, ShoppingBag, User, Calendar, MapPin, Sparkles, ChevronDown, Sun, Moon } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
+import { useTheme } from "@/lib/theme-context";
 import { CartDrawer } from "@/components/layout/CartDrawer";
 import { AccountDrawer } from "@/components/layout/AccountDrawer";
 
@@ -13,9 +14,10 @@ export function Navbar() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isAccountOpen, setIsAccountOpen] = useState(false);
-  const [pincode, setPincode] = useState("10001");
+  const [pincode] = useState("10001");
 
   const { items } = useCart();
+  const { theme, toggleTheme } = useTheme();
   const router = useRouter();
 
   const totalItemCount = items.reduce((acc, item) => acc + item.quantity, 0);
@@ -32,7 +34,7 @@ export function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-gray-950/95 backdrop-blur-md border-b border-gray-800">
+    <header className="sticky top-0 z-40 bg-gray-950/95 backdrop-blur-md border-b border-gray-800 transition-colors">
       {/* Amazon / Flipkart Style Top Banner */}
       <div className="bg-gradient-to-r from-amber-600 via-indigo-600 to-purple-600 text-white text-[11px] font-bold py-1.5 px-4 text-center tracking-wide flex items-center justify-center gap-2">
         <Sparkles className="w-3.5 h-3.5" />
@@ -97,8 +99,8 @@ export function Navbar() {
             </div>
           </form>
 
-          {/* User & Cart Quick Links */}
-          <div className="flex items-center gap-4">
+          {/* User, Theme Toggle & Cart Quick Links */}
+          <div className="flex items-center gap-3 sm:gap-4">
             <Link
               href="/booking"
               className="hidden sm:flex items-center gap-1.5 text-xs font-bold text-indigo-400 hover:text-indigo-300 bg-indigo-950/80 border border-indigo-800/60 px-3.5 py-2 rounded-xl transition"
@@ -106,9 +108,20 @@ export function Navbar() {
               <Calendar className="w-4 h-4" /> Book Slot
             </Link>
 
+            {/* Light / Dark Mode Toggle Button */}
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-xl bg-gray-900 border border-gray-800 text-gray-300 hover:text-white transition flex items-center justify-center"
+              title={`Switch to ${theme === "dark" ? "Light" : "Dark"} Mode`}
+            >
+              {theme === "dark" ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-indigo-600" />}
+            </button>
+
+            {/* Account Drawer Toggle */}
             <button
               onClick={() => setIsAccountOpen(true)}
               className="flex items-center gap-1.5 text-xs font-bold text-gray-300 hover:text-white bg-gray-900 border border-gray-800 px-3 py-2 rounded-xl transition"
+              title="Open Account Menu"
             >
               <User className="w-4 h-4 text-indigo-400" />
               <span className="hidden sm:inline">Account</span>
@@ -117,7 +130,8 @@ export function Navbar() {
             {/* Cart Drawer Toggle */}
             <button
               onClick={() => setIsCartOpen(true)}
-              className="relative flex items-center justify-center p-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-600/30 transition transform hover:scale-105"
+              className="relative flex items-center justify-center p-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-600/30 transition transform hover:scale-105 cursor-pointer"
+              title="Open Shopping Cart"
             >
               <ShoppingBag className="w-5 h-5" />
               {totalItemCount > 0 && (
@@ -129,7 +143,7 @@ export function Navbar() {
           </div>
         </div>
 
-        {/* Quick Links Sub-header (Flipkart Style) */}
+        {/* Quick Links Sub-header */}
         <div className="flex items-center gap-6 mt-2 pt-2 border-t border-gray-800/60 text-xs font-semibold text-gray-400 overflow-x-auto whitespace-nowrap scrollbar-none">
           <Link href="/category" className="hover:text-amber-400 text-amber-300 font-bold flex items-center gap-1">
             🔥 Super Deals

@@ -58,48 +58,55 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 </button>
               </div>
             ) : (
-              items.map((item) => (
-                <div
-                  key={item.id}
-                  className="bg-gray-900 border border-gray-800 rounded-xl p-4 flex items-center justify-between gap-4 hover:border-gray-700 transition"
-                >
-                  <div className="w-14 h-14 bg-gray-950 border border-gray-800 rounded-lg flex items-center justify-center text-2xl flex-shrink-0">
-                    {item.image || "📦"}
+              items.map((item) => {
+                const isUrl = typeof item.image === "string" && (item.image.startsWith("http") || item.image.startsWith("/"));
+                return (
+                  <div
+                    key={item.id}
+                    className="bg-gray-900 border border-gray-800 rounded-xl p-4 flex items-center justify-between gap-4 hover:border-gray-700 transition"
+                  >
+                    <div className="w-14 h-14 bg-gray-950 border border-gray-800 rounded-lg overflow-hidden flex items-center justify-center text-2xl flex-shrink-0">
+                      {isUrl ? (
+                        <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                      ) : (
+                        item.image || "📦"
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <span className="text-[10px] uppercase font-bold text-indigo-400 tracking-wider">
+                        {item.type}
+                      </span>
+                      <h4 className="text-sm font-semibold truncate text-white">{item.name}</h4>
+                      <p className="text-sm font-bold text-gray-300 mt-1">${item.price}</p>
+                    </div>
+                    <div className="flex flex-col items-end gap-2">
+                      <button
+                        onClick={() => removeItem(item.id)}
+                        className="text-gray-500 hover:text-red-400 transition"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                      {item.type === "product" && (
+                        <div className="flex items-center space-x-1 border border-gray-800 rounded-lg bg-gray-950 p-0.5 text-xs">
+                          <button
+                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                            className="p-1 hover:text-indigo-400"
+                          >
+                            <Minus className="w-3 h-3" />
+                          </button>
+                          <span className="font-bold px-1.5">{item.quantity}</span>
+                          <button
+                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                            className="p-1 hover:text-indigo-400"
+                          >
+                            <Plus className="w-3 h-3" />
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <span className="text-[10px] uppercase font-bold text-indigo-400 tracking-wider">
-                      {item.type}
-                    </span>
-                    <h4 className="text-sm font-semibold truncate text-white">{item.name}</h4>
-                    <p className="text-sm font-bold text-gray-300 mt-1">${item.price}</p>
-                  </div>
-                  <div className="flex flex-col items-end gap-2">
-                    <button
-                      onClick={() => removeItem(item.id)}
-                      className="text-gray-500 hover:text-red-400 transition"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                    {item.type === "product" && (
-                      <div className="flex items-center space-x-1 border border-gray-800 rounded-lg bg-gray-950 p-0.5 text-xs">
-                        <button
-                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                          className="p-1 hover:text-indigo-400"
-                        >
-                          <Minus className="w-3 h-3" />
-                        </button>
-                        <span className="font-bold px-1.5">{item.quantity}</span>
-                        <button
-                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                          className="p-1 hover:text-indigo-400"
-                        >
-                          <Plus className="w-3 h-3" />
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))
+                );
+              })
             )}
           </div>
 
