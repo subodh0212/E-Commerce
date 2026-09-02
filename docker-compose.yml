@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  # Next.js Application Container
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://postgres:postgres_password@postgres:5432/nexus_db?schema=public
+      - NEXTAUTH_URL=http://localhost:3000
+      - NEXTAUTH_SECRET=production_super_secret_nextauth_jwt_key_2026
+      - STRIPE_SECRET_KEY=sk_live_sample_stripe_secret_key
+      - NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_sample_stripe_pub_key
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: always
+
+  # PostgreSQL Database Container
+  postgres:
+    image: postgres:16-alpine
+    container_name: nexus_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres_password
+      POSTGRES_DB: nexus_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d nexus_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
