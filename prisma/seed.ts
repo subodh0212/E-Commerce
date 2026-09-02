@@ -2,175 +2,251 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-async function main() {
-  console.log("Seeding database with 10 sample products and 5 mock booking slots...");
+const sampleProducts = [
+  {
+    id: "prod-1",
+    name: "Ultra Wireless Noise-Cancelling Headphones",
+    description: "Premium studio-quality acoustics with active noise cancellation, 40-hour battery life, and high-fidelity Bluetooth 5.3 playback.",
+    price: 299.99,
+    originalPrice: 429.99,
+    discountPercent: 30,
+    stock: 25,
+    category: "electronics",
+    brand: "SonicMaster",
+    rating: 4.9,
+    reviewsCount: 1240,
+    isExpress: true,
+    deliveryEstimate: "Tomorrow, by 11 AM",
+    images: JSON.stringify([
+      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1484704849700-f032a568e944?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=800&q=80",
+    ]),
+    isBookable: false,
+  },
+  {
+    id: "prod-2",
+    name: "1-on-1 Executive Strategy Consultation",
+    description: "Private 60-minute strategy & technical architecture consulting with a principal engineer.",
+    price: 150.00,
+    originalPrice: 250.00,
+    discountPercent: 40,
+    stock: 99,
+    category: "services",
+    brand: "Nexus Advisory",
+    rating: 5.0,
+    reviewsCount: 89,
+    isExpress: true,
+    deliveryEstimate: "Instant Slot Booking",
+    images: JSON.stringify([
+      "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80",
+    ]),
+    isBookable: true,
+  },
+  {
+    id: "prod-3",
+    name: "Minimalist RGB Mechanical Keyboard",
+    description: "Hot-swappable tactile wireless mechanical keyboard with CNC anodized aluminum frame.",
+    price: 189.00,
+    originalPrice: 249.00,
+    discountPercent: 24,
+    stock: 12,
+    category: "accessories",
+    brand: "KeyWorks",
+    rating: 4.8,
+    reviewsCount: 412,
+    isExpress: true,
+    deliveryEstimate: "Tomorrow, by 2 PM",
+    images: JSON.stringify([
+      "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?auto=format&fit=crop&w=800&q=80",
+    ]),
+    isBookable: false,
+  },
+  {
+    id: "prod-4",
+    name: "Ergonomic Mesh Executive Chair",
+    description: "Dynamic lumbar support mesh executive office chair with 4D adjustable armrests.",
+    price: 349.50,
+    originalPrice: 499.00,
+    discountPercent: 30,
+    stock: 8,
+    category: "furniture",
+    brand: "ErgoDesign",
+    rating: 4.7,
+    reviewsCount: 198,
+    isExpress: false,
+    deliveryEstimate: "Delivery in 2 Days",
+    images: JSON.stringify([
+      "https://images.unsplash.com/photo-1580481072645-022f9a6d1279?auto=format&fit=crop&w=800&q=80",
+    ]),
+    isBookable: false,
+  },
+  {
+    id: "prod-5",
+    name: "4K Curved Ultra-Wide Monitor 34\"",
+    description: "34-inch curved IPS 144Hz HDR display with integrated 90W USB-C docking station.",
+    price: 699.00,
+    originalPrice: 899.00,
+    discountPercent: 22,
+    stock: 10,
+    category: "electronics",
+    brand: "SonicMaster",
+    rating: 4.9,
+    reviewsCount: 620,
+    isExpress: true,
+    deliveryEstimate: "Tomorrow, by 10 AM",
+    images: JSON.stringify([
+      "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=800&q=80",
+    ]),
+    isBookable: false,
+  },
+  {
+    id: "prod-6",
+    name: "Senior Code Architecture Review",
+    description: "In-depth code quality, security vulnerability, and infrastructure scaling audit.",
+    price: 220.00,
+    originalPrice: 350.00,
+    discountPercent: 37,
+    stock: 50,
+    category: "services",
+    brand: "Nexus Advisory",
+    rating: 5.0,
+    reviewsCount: 74,
+    isExpress: true,
+    deliveryEstimate: "Instant Reservation",
+    images: JSON.stringify([
+      "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=800&q=80",
+    ]),
+    isBookable: true,
+  },
+  {
+    id: "prod-7",
+    name: "Smart LED Studio Desk Lamp",
+    description: "Dimmable eye-care LED lamp with wireless Qi charging pad and ambient sensor.",
+    price: 79.99,
+    originalPrice: 119.99,
+    discountPercent: 33,
+    stock: 30,
+    category: "accessories",
+    brand: "ErgoDesign",
+    rating: 4.6,
+    reviewsCount: 310,
+    isExpress: true,
+    deliveryEstimate: "Tomorrow, by 5 PM",
+    images: JSON.stringify([
+      "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=800&q=80",
+    ]),
+    isBookable: false,
+  },
+  {
+    id: "prod-8",
+    name: "Active ANC Wireless Studio Earbuds",
+    description: "Compact IPX7 waterproof wireless earbuds with spatial audio and wireless charging case.",
+    price: 129.99,
+    originalPrice: 179.99,
+    discountPercent: 28,
+    stock: 40,
+    category: "electronics",
+    brand: "SonicMaster",
+    rating: 4.8,
+    reviewsCount: 529,
+    isExpress: true,
+    deliveryEstimate: "Tomorrow, by 11 AM",
+    images: JSON.stringify([
+      "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=800&q=80",
+    ]),
+    isBookable: false,
+  },
+  {
+    id: "prod-9",
+    name: "UI/UX Design System Workshop",
+    description: "Custom Figma component design system tokenization and team design review.",
+    price: 450.00,
+    originalPrice: 600.00,
+    discountPercent: 25,
+    stock: 20,
+    category: "services",
+    brand: "Nexus Advisory",
+    rating: 5.0,
+    reviewsCount: 45,
+    isExpress: true,
+    deliveryEstimate: "Instant Reservation",
+    images: JSON.stringify([
+      "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?auto=format&fit=crop&w=800&q=80",
+    ]),
+    isBookable: true,
+  },
+  {
+    id: "prod-10",
+    name: "Italian Leather Executive Journal",
+    description: "Handcrafted full-grain Italian leather journal with brass fountain pen.",
+    price: 45.00,
+    originalPrice: 65.00,
+    discountPercent: 30,
+    stock: 50,
+    category: "accessories",
+    brand: "KeyWorks",
+    rating: 4.9,
+    reviewsCount: 180,
+    isExpress: true,
+    deliveryEstimate: "Tomorrow, by 1 PM",
+    images: JSON.stringify([
+      "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=800&q=80",
+    ]),
+    isBookable: false,
+  },
+];
 
-  // Seed sample user
-  const user = await prisma.user.upsert({
-    where: { email: "alex.qa@example.com" },
-    update: {},
-    create: {
-      email: "alex.qa@example.com",
-      password: "hashed_password_123",
+async function main() {
+  console.log("Seeding Amazon/Flipkart/Zomato style dataset...");
+
+  await prisma.booking.deleteMany();
+  await prisma.orderItem.deleteMany();
+  await prisma.order.deleteMany();
+  await prisma.product.deleteMany();
+  await prisma.user.deleteMany();
+
+  const user = await prisma.user.create({
+    data: {
+      email: "demo@nexus.com",
+      password: "password123",
       role: "USER",
     },
   });
 
-  // Seed 10 products
-  const products = [
-    {
-      id: "prod-1",
-      name: "Ultra Wireless Headphones",
-      description: "Active noise cancelling wireless studio headphones.",
-      price: 299.99,
-      stock: 25,
-      category: "electronics",
-      brand: "SonicMaster",
-      rating: 4.9,
-      images: JSON.stringify(["🎧"]),
-      isBookable: false,
-    },
-    {
-      id: "prod-2",
-      name: "Executive Strategy Session",
-      description: "1-on-1 60 minute strategy & technical consulting.",
-      price: 150.00,
-      stock: 99,
-      category: "services",
-      brand: "Nexus Advisory",
-      rating: 5.0,
-      images: JSON.stringify(["📅"]),
-      isBookable: true,
-    },
-    {
-      id: "prod-3",
-      name: "Minimalist Mechanical Keyboard",
-      description: "Hot-swappable RGB wireless mechanical keyboard.",
-      price: 189.00,
-      stock: 12,
-      category: "accessories",
-      brand: "KeyWorks",
-      rating: 4.8,
-      images: JSON.stringify(["⌨️"]),
-      isBookable: false,
-    },
-    {
-      id: "prod-4",
-      name: "Ergonomic Office Chair",
-      description: "Lumbar support mesh executive office chair.",
-      price: 349.50,
-      stock: 8,
-      category: "furniture",
-      brand: "ErgoDesign",
-      rating: 4.7,
-      images: JSON.stringify(["🪑"]),
-      isBookable: false,
-    },
-    {
-      id: "prod-5",
-      name: "4K Ultra-Wide Monitor",
-      description: "34-inch curved IPS 144Hz display.",
-      price: 699.00,
-      stock: 10,
-      category: "electronics",
-      brand: "SonicMaster",
-      rating: 4.9,
-      images: JSON.stringify(["🖥️"]),
-      isBookable: false,
-    },
-    {
-      id: "prod-6",
-      name: "1-on-1 Code Architecture Review",
-      description: "Deep dive code review with a Senior Architect.",
-      price: 220.00,
-      stock: 50,
-      category: "services",
-      brand: "Nexus Advisory",
-      rating: 5.0,
-      images: JSON.stringify(["💻"]),
-      isBookable: true,
-    },
-    {
-      id: "prod-7",
-      name: "Smart Studio Desk Lamp",
-      description: "Dimmable LED lamp with wireless phone charger.",
-      price: 79.99,
-      stock: 30,
-      category: "accessories",
-      brand: "ErgoDesign",
-      rating: 4.6,
-      images: JSON.stringify(["💡"]),
-      isBookable: false,
-    },
-    {
-      id: "prod-8",
-      name: "Wireless Noise-Isolating Earbuds",
-      description: "Compact waterproof Bluetooth 5.3 earbuds.",
-      price: 129.99,
-      stock: 40,
-      category: "electronics",
-      brand: "SonicMaster",
-      rating: 4.8,
-      images: JSON.stringify(["🎵"]),
-      isBookable: false,
-    },
-    {
-      id: "prod-9",
-      name: "Custom UI Design System Consulting",
-      description: "Full Design System review and token audit.",
-      price: 450.00,
-      stock: 20,
-      category: "services",
-      brand: "Nexus Advisory",
-      rating: 5.0,
-      images: JSON.stringify(["🎨"]),
-      isBookable: true,
-    },
-    {
-      id: "prod-10",
-      name: "Leather Executive Notebook & Pen",
-      description: "Handcrafted Italian leather journal.",
-      price: 45.00,
-      stock: 50,
-      category: "accessories",
-      brand: "KeyWorks",
-      rating: 4.9,
-      images: JSON.stringify(["📓"]),
-      isBookable: false,
-    },
-  ];
-
-  for (const p of products) {
-    await prisma.product.upsert({
-      where: { id: p.id },
-      update: p,
-      create: p,
+  for (const productData of sampleProducts) {
+    await prisma.product.create({
+      data: productData,
     });
   }
 
-  // Seed 5 mock booking slots
-  const mockBookings = [
-    { id: "b-1", userId: user.id, productId: "prod-2", date: "2026-09-15", timeSlot: "10:30 AM", status: "CONFIRMED" },
-    { id: "b-2", userId: user.id, productId: "prod-2", date: "2026-09-15", timeSlot: "01:00 PM", status: "CONFIRMED" },
-    { id: "b-3", userId: user.id, productId: "prod-6", date: "2026-09-16", timeSlot: "09:00 AM", status: "CONFIRMED" },
-    { id: "b-4", userId: user.id, productId: "prod-6", date: "2026-09-16", timeSlot: "02:30 PM", status: "CONFIRMED" },
-    { id: "b-5", userId: user.id, productId: "prod-9", date: "2026-09-17", timeSlot: "04:00 PM", status: "CONFIRMED" },
+  const mockSlots = [
+    { date: "2026-09-15", timeSlot: "10:30 AM", status: "BOOKED" },
+    { date: "2026-09-15", timeSlot: "01:00 PM", status: "BOOKED" },
+    { date: "2026-09-16", timeSlot: "09:00 AM", status: "BOOKED" },
+    { date: "2026-09-20", timeSlot: "03:00 PM", status: "BOOKED" },
+    { date: "2026-09-22", timeSlot: "11:00 AM", status: "BOOKED" },
   ];
 
-  for (const b of mockBookings) {
-    await prisma.booking.upsert({
-      where: { id: b.id },
-      update: b,
-      create: b,
+  for (const slot of mockSlots) {
+    await prisma.booking.create({
+      data: {
+        userId: user.id,
+        date: slot.date,
+        timeSlot: slot.timeSlot,
+        status: slot.status,
+      },
     });
   }
 
-  console.log("Database successfully seeded with 10 products and 5 mock booking slots!");
+  console.log("Database seeded successfully!");
 }
 
 main()
   .catch((e) => {
-    console.error("Seeding error:", e);
+    console.error(e);
     process.exit(1);
   })
   .finally(async () => {

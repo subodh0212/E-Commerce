@@ -1,4 +1,4 @@
-// Prisma Schema for Hybrid E-Commerce & Booking Platform (SQLite compatible)
+// Prisma Schema for Hybrid E-Commerce & Booking Platform (Amazon/Flipkart Style)
 
 generator client {
   provider = "prisma-client-js"
@@ -22,21 +22,26 @@ model User {
 }
 
 model Product {
-  id          String      @id @default(cuid())
-  name        String
-  description String
-  price       Float
-  stock       Int         @default(0)
-  category    String
-  brand       String?
-  rating      Float       @default(5.0)
-  images      String      @default("[]") // JSON string of images
-  isBookable  Boolean     @default(false)
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  id               String      @id @default(cuid())
+  name             String
+  description      String
+  price            Float
+  originalPrice    Float?
+  discountPercent  Int         @default(0)
+  stock            Int         @default(0)
+  category         String
+  brand            String?
+  rating           Float       @default(5.0)
+  reviewsCount     Int         @default(120)
+  images           String      @default("[]") // JSON string of image URLs
+  isBookable       Boolean     @default(false)
+  isExpress        Boolean     @default(true)
+  deliveryEstimate String      @default("Tomorrow, by 11 AM")
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
 
-  orderItems  OrderItem[]
-  bookings    Booking[]
+  orderItems       OrderItem[]
+  bookings         Booking[]
 }
 
 model Order {

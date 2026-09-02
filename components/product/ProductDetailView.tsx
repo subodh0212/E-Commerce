@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Star, ShieldCheck, Truck, RefreshCw, ShoppingBag, Zap, Heart, Plus, Minus, Check } from "lucide-react";
+import { Star, ShieldCheck, Truck, RefreshCw, ShoppingBag, Zap, Heart, Plus, Minus, Check, MapPin, Tag, CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useCart } from "@/lib/cart-context";
 
@@ -19,6 +19,8 @@ export function ProductDetailView({ id }: ProductDetailViewProps) {
   const [quantity, setQuantity] = useState<number>(1);
   const [activeTab, setActiveTab] = useState<"description" | "specs" | "reviews">("description");
   const [added, setAdded] = useState(false);
+  const [userPincode, setUserPincode] = useState("10001");
+  const [pincodeChecked, setPincodeChecked] = useState(true);
 
   const { addItem } = useCart();
   const router = useRouter();
@@ -60,11 +62,14 @@ export function ProductDetailView({ id }: ProductDetailViewProps) {
     id,
     name: "Ultra Wireless Noise-Cancelling Headphones",
     price: 299.99,
+    originalPrice: 429.99,
+    discountPercent: 30,
     description: "Premium studio-quality acoustics with active noise cancellation, 40-hour battery life, and high-fidelity Bluetooth 5.3 playback.",
     category: "electronics",
     brand: "SonicMaster",
     stock: 15,
     rating: 4.9,
+    reviewsCount: 1240,
     images: ["https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80"],
   };
 
@@ -150,11 +155,63 @@ export function ProductDetailView({ id }: ProductDetailViewProps) {
                 <Star className="w-4 h-4 fill-amber-400 mr-1" /> {p.rating || 4.9}
               </div>
               <span className="text-xs text-gray-500">•</span>
-              <span className="text-xs text-gray-400">128 verified customer reviews</span>
+              <span className="text-xs text-gray-400">{p.reviewsCount || 1240} verified customer reviews</span>
             </div>
           </div>
 
-          <div className="text-4xl font-black text-white">${p.price}</div>
+          {/* Amazon / Flipkart Style Pricing & Discounts */}
+          <div className="bg-gray-900/80 border border-gray-800 p-4 rounded-xl space-y-1">
+            <div className="flex items-baseline gap-3">
+              <span className="text-4xl font-black text-white">${p.price}</span>
+              {p.originalPrice && p.originalPrice > p.price && (
+                <span className="text-lg text-gray-500 line-through">${p.originalPrice}</span>
+              )}
+              {p.discountPercent > 0 && (
+                <span className="text-xs font-black text-red-400 bg-red-950 border border-red-800 px-2.5 py-1 rounded-full uppercase">
+                  {p.discountPercent}% OFF
+                </span>
+              )}
+            </div>
+            <span className="text-[11px] text-gray-400 block">Inclusive of all taxes & free shipping</span>
+          </div>
+
+          {/* Flipkart / Bank Offers Box */}
+          <div className="bg-gradient-to-r from-amber-950/40 via-gray-900 to-indigo-950/40 border border-amber-500/30 p-4 rounded-xl space-y-2">
+            <h4 className="text-xs font-bold text-amber-400 flex items-center gap-1.5 uppercase">
+              <Tag className="w-3.5 h-3.5" /> Available Offers & Card Discounts
+            </h4>
+            <div className="space-y-1 text-xs text-gray-300">
+              <div className="flex items-center gap-2"><CreditCard className="w-3.5 h-3.5 text-indigo-400" /> 10% Instant Discount on HDFC & ICICI Bank Credit Cards</div>
+              <div className="flex items-center gap-2"><Tag className="w-3.5 h-3.5 text-amber-400" /> Use Coupon <strong className="text-white font-mono bg-gray-950 px-1.5 py-0.5 rounded border border-gray-800">NEXUS10</strong> for extra $10 off</div>
+            </div>
+          </div>
+
+          {/* Zomato / Amazon Delivery Pincode Checker */}
+          <div className="bg-gray-900 border border-gray-800 p-4 rounded-xl space-y-2">
+            <label className="text-xs font-bold uppercase text-gray-400 flex items-center gap-1">
+              <MapPin className="w-3.5 h-3.5 text-amber-400" /> Delivery & Service Pincode
+            </label>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={userPincode}
+                onChange={(e) => setUserPincode(e.target.value)}
+                placeholder="Enter Pincode"
+                className="bg-gray-950 border border-gray-800 rounded-lg px-3 py-1.5 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-indigo-500"
+              />
+              <button
+                onClick={() => setPincodeChecked(true)}
+                className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-1.5 text-xs font-bold rounded-lg transition"
+              >
+                Check
+              </button>
+            </div>
+            {pincodeChecked && (
+              <span className="text-xs text-emerald-400 font-semibold block flex items-center gap-1 mt-1">
+                <Truck className="w-3.5 h-3.5" /> Express Delivery Available to {userPincode} (Tomorrow by 11 AM)
+              </span>
+            )}
+          </div>
 
           {/* Color Selector */}
           <div className="space-y-2">
@@ -230,9 +287,9 @@ export function ProductDetailView({ id }: ProductDetailViewProps) {
               size="lg"
               variant="secondary"
               onClick={handleBuyNow}
-              className="flex-1 gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-base py-3.5"
+              className="flex-1 gap-2 bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-base py-3.5 shadow-xl shadow-amber-500/20"
             >
-              <Zap className="w-5 h-5" /> BUY NOW
+              <Zap className="w-5 h-5 fill-black" /> BUY NOW
             </Button>
           </div>
 
@@ -276,7 +333,7 @@ export function ProductDetailView({ id }: ProductDetailViewProps) {
                 : "border-transparent text-gray-400 hover:text-white"
             }`}
           >
-            Reviews (2)
+            Customer Ratings & Reviews
           </button>
         </div>
 
@@ -296,13 +353,37 @@ export function ProductDetailView({ id }: ProductDetailViewProps) {
         )}
 
         {activeTab === "reviews" && (
-          <div className="space-y-3 text-sm text-gray-300">
-            <div className="bg-gray-950 border border-gray-800 p-4 rounded-xl">
-              <div className="flex justify-between text-xs text-gray-400 mb-1 font-bold">
-                <span>Alex M.</span>
-                <span className="text-emerald-400">Verified Buyer</span>
+          <div className="space-y-6">
+            {/* Amazon Rating Breakdown Bar Chart */}
+            <div className="bg-gray-950 border border-gray-800 p-6 rounded-xl space-y-3">
+              <h4 className="text-sm font-bold text-white">Customer Rating Summary</h4>
+              <div className="space-y-2 text-xs text-gray-400">
+                <div className="flex items-center gap-3">
+                  <span>5 Star</span>
+                  <div className="flex-1 bg-gray-900 rounded-full h-2 overflow-hidden"><div className="bg-amber-400 h-full w-[85%]" /></div>
+                  <span>85%</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span>4 Star</span>
+                  <div className="flex-1 bg-gray-900 rounded-full h-2 overflow-hidden"><div className="bg-amber-400 h-full w-[12%]" /></div>
+                  <span>12%</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span>3 Star</span>
+                  <div className="flex-1 bg-gray-900 rounded-full h-2 overflow-hidden"><div className="bg-amber-400 h-full w-[2%]" /></div>
+                  <span>2%</span>
+                </div>
               </div>
-              <p>Exceptional sound stage and build quality!</p>
+            </div>
+
+            <div className="space-y-3 text-sm text-gray-300">
+              <div className="bg-gray-950 border border-gray-800 p-4 rounded-xl">
+                <div className="flex justify-between text-xs text-gray-400 mb-1 font-bold">
+                  <span>Alex M.</span>
+                  <span className="text-emerald-400">Verified Amazon Buyer</span>
+                </div>
+                <p>Exceptional active noise cancellation and build quality. Shipped next day!</p>
+              </div>
             </div>
           </div>
         )}
