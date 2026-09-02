@@ -29,14 +29,13 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // 2. Protected Route Authentication Checks
-  const protectedRoutes = ["/checkout", "/user-profile"];
+  // 2. Protected Route Authentication Checks (User Profile requires token)
+  const protectedRoutes = ["/user-profile"];
   const isProtected = protectedRoutes.some((route) => pathname.startsWith(route));
 
   if (isProtected) {
     const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
 
-    // Allow guest bypass in development mode or if token exists
     if (!token && process.env.NODE_ENV === "production") {
       const loginUrl = new URL("/login", request.url);
       loginUrl.searchParams.set("callbackUrl", encodeURI(request.url));
@@ -54,5 +53,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/checkout/:path*", "/user-profile/:path*", "/api/:path*"],
+  matcher: ["/user-profile/:path*", "/api/:path*"],
 };
