@@ -1,27 +1,54 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Filter, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
 export function SidebarFilters() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const initialBrand = searchParams.get("brand") || "";
+
   const [price, setPrice] = useState<number>(500);
-  const [selectedBrands, setSelectedBrands] = useState<string[]>(["SonicMaster"]);
+  const [selectedBrands, setSelectedBrands] = useState<string[]>(initialBrand ? [initialBrand] : []);
   const [selectedSizes, setSelectedSizes] = useState<string[]>(["M"]);
 
-  const brands = ["SonicMaster", "Nexus Advisory", "KeyWorks", "ErgoDesign", "TechElite"];
+  const brands = ["SonicMaster", "Nexus Advisory", "KeyWorks", "ErgoDesign"];
   const sizes = ["S", "M", "L", "XL"];
 
   const toggleBrand = (brand: string) => {
-    setSelectedBrands((prev) =>
-      prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand]
-    );
+    const updated = selectedBrands.includes(brand)
+      ? selectedBrands.filter((b) => b !== brand)
+      : [...selectedBrands, brand];
+    setSelectedBrands(updated);
+
+    if (updated.length > 0) {
+      router.push(`/category?brand=${encodeURIComponent(updated[0])}`);
+    } else {
+      router.push("/category");
+    }
   };
 
   const toggleSize = (size: string) => {
     setSelectedSizes((prev) =>
       prev.includes(size) ? prev.filter((s) => s !== size) : [...prev, size]
     );
+  };
+
+  const handleApply = () => {
+    if (selectedBrands.length > 0) {
+      router.push(`/category?brand=${encodeURIComponent(selectedBrands[0])}`);
+    } else {
+      router.push("/category");
+    }
+  };
+
+  const handleReset = () => {
+    setPrice(500);
+    setSelectedBrands([]);
+    setSelectedSizes([]);
+    router.push("/category");
   };
 
   return (
@@ -31,11 +58,7 @@ export function SidebarFilters() {
           <Filter className="w-4 h-4 text-indigo-400" /> Filters
         </h3>
         <button
-          onClick={() => {
-            setPrice(500);
-            setSelectedBrands([]);
-            setSelectedSizes([]);
-          }}
+          onClick={handleReset}
           className="text-xs text-gray-400 hover:text-indigo-400 flex items-center gap-1 transition"
         >
           <RotateCcw className="w-3 h-3" /> Reset
@@ -97,7 +120,7 @@ export function SidebarFilters() {
         </div>
       </div>
 
-      <Button className="w-full mt-4" size="sm">
+      <Button onClick={handleApply} className="w-full mt-4" size="sm">
         Apply Filters
       </Button>
     </aside>
