@@ -35,7 +35,7 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 bg-gray-950/95 backdrop-blur-md border-b border-gray-800 transition-colors">
-      {/* Amazon / Flipkart Style Top Banner */}
+      {/* Top Banner */}
       <div className="bg-gradient-to-r from-amber-600 via-indigo-600 to-purple-600 text-white text-[11px] font-bold py-1.5 px-4 text-center tracking-wide flex items-center justify-center gap-2">
         <Sparkles className="w-3.5 h-3.5" />
         <span>⚡ BIG SAVINGS SALE: Up to 50% OFF + Extra 10% Instant Bank Discount | Free Express Delivery</span>
@@ -56,7 +56,7 @@ export function Navbar() {
               </div>
             </Link>
 
-            {/* Zomato/Amazon Style Pincode Selector */}
+            {/* Pincode Selector */}
             <div className="hidden lg:flex items-center gap-1.5 text-xs text-gray-300 bg-gray-900 border border-gray-800 rounded-xl px-3 py-1.5 cursor-pointer hover:border-indigo-500/50 transition">
               <MapPin className="w-3.5 h-3.5 text-amber-400" />
               <div className="flex flex-col text-[10px]">
@@ -67,7 +67,7 @@ export function Navbar() {
             </div>
           </div>
 
-          {/* Search Bar with Category Selector (Amazon Style) */}
+          {/* Search Bar with Category Selector */}
           <form onSubmit={handleSearchSubmit} className="flex-1 max-w-2xl hidden md:flex items-center">
             <div className="relative flex items-center w-full bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden focus-within:border-indigo-500 transition shadow-inner">
               <select
@@ -145,7 +145,10 @@ export function Navbar() {
 
         {/* Quick Links Sub-header */}
         <div className="flex items-center gap-6 mt-2 pt-2 border-t border-gray-800/60 text-xs font-semibold text-gray-400 overflow-x-auto whitespace-nowrap scrollbar-none">
-          <Link href="/category" className="hover:text-amber-400 text-amber-300 font-bold flex items-center gap-1">
+          <Link href="/atelier" className="hover:text-amber-300 text-amber-400 font-extrabold flex items-center gap-1.5 bg-amber-950/60 border border-amber-800/50 px-2.5 py-0.5 rounded-full">
+            ✨ Atelier Luxury Storefront
+          </Link>
+          <Link href="/category" className="hover:text-amber-400 text-gray-300 font-bold">
             🔥 Super Deals
           </Link>
           <Link href="/category?category=electronics" className="hover:text-white">Electronics</Link>
