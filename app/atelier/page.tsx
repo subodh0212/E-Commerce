@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, ShoppingBag, Heart, User, Search, Truck, RefreshCw, ShieldCheck, Headphones, Star, Check } from "lucide-react";
+import { ArrowRight, ShoppingBag, Search, User, Truck, RefreshCw, ShieldCheck, Headphones, Star, Check } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
 import { LiveChatWidget } from "@/components/support/LiveChatWidget";
 
@@ -30,37 +30,37 @@ export default function AtelierPage() {
       title: "Men",
       subtitle: "Everyday tailoring",
       image: "https://images.unsplash.com/photo-1490578474895-699bc4e2cf59?auto=format&fit=crop&w=800&q=80",
-      link: "/category?category=electronics",
+      link: "/atelier/men",
     },
     {
       title: "Women",
       subtitle: "Effortless layers",
       image: "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=800&q=80",
-      link: "/category?category=services",
+      link: "/atelier/women",
     },
     {
       title: "Footwear",
       subtitle: "Grounded in comfort",
       image: "https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=800&q=80",
-      link: "/category?category=accessories",
+      link: "/atelier/footwear",
     },
     {
       title: "Bags",
       subtitle: "Carry it beautifully",
       image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=800&q=80",
-      link: "/category?category=furniture",
+      link: "/atelier/bags",
     },
     {
       title: "Watches",
       subtitle: "Time, refined",
       image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80",
-      link: "/category",
+      link: "/atelier/accessories",
     },
   ];
 
   const bestSellers: AtelierProduct[] = [
     {
-      id: "prod-1",
+      id: "atelier-m1",
       name: "Linen Relaxed Overshirt",
       category: "Men",
       price: 79.00,
@@ -70,7 +70,7 @@ export default function AtelierPage() {
       tag: "NEW",
     },
     {
-      id: "prod-2",
+      id: "atelier-w1",
       name: "Draped Silk Midi Dress",
       category: "Women",
       price: 189.00,
@@ -80,7 +80,7 @@ export default function AtelierPage() {
       tag: "BESTSELLER",
     },
     {
-      id: "prod-3",
+      id: "atelier-f1",
       name: "Minimalist Leather Loafers",
       category: "Footwear",
       price: 145.00,
@@ -89,8 +89,8 @@ export default function AtelierPage() {
       image: "https://images.unsplash.com/photo-1533867617858-e7b97e060509?auto=format&fit=crop&w=800&q=80",
     },
     {
-      id: "prod-4",
-      name: "Structured Tote Bag",
+      id: "atelier-b1",
+      name: "Structured Leather Tote Bag",
       category: "Bags",
       price: 120.00,
       rating: 4.9,
@@ -134,11 +134,11 @@ export default function AtelierPage() {
 
           {/* Navigation Links */}
           <nav className="hidden md:flex items-center space-x-10 text-xs font-semibold uppercase tracking-wider text-[#666666]">
-            <Link href="/category" className="hover:text-[#1A1A1A] transition-colors">New in</Link>
-            <Link href="/category?category=electronics" className="hover:text-[#1A1A1A] transition-colors">Men</Link>
-            <Link href="/category?category=services" className="hover:text-[#1A1A1A] transition-colors">Women</Link>
-            <Link href="/category?category=accessories" className="hover:text-[#1A1A1A] transition-colors">Footwear</Link>
-            <Link href="/category?category=furniture" className="hover:text-[#1A1A1A] transition-colors">Accessories</Link>
+            <Link href="/atelier/new-in" className="hover:text-[#1A1A1A] transition-colors">New in</Link>
+            <Link href="/atelier/men" className="hover:text-[#1A1A1A] transition-colors">Men</Link>
+            <Link href="/atelier/women" className="hover:text-[#1A1A1A] transition-colors">Women</Link>
+            <Link href="/atelier/footwear" className="hover:text-[#1A1A1A] transition-colors">Footwear</Link>
+            <Link href="/atelier/accessories" className="hover:text-[#1A1A1A] transition-colors">Accessories</Link>
           </nav>
 
           {/* Iconography */}
@@ -161,7 +161,7 @@ export default function AtelierPage() {
         </div>
       </header>
 
-      {/* 2. Hero Section (Editorial Banner) */}
+      {/* 2. Hero Section */}
       <section className="relative w-full h-[82vh] overflow-hidden bg-[#1A1A1A]">
         <img
           src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=1800&q=80"
@@ -181,7 +181,7 @@ export default function AtelierPage() {
             A refined edit of lightweight layers, easy tailoring, and pieces that feel right from morning through late evening.
           </p>
           <div className="pt-2">
-            <Link href="/category">
+            <Link href="/atelier/new-in">
               <button className="bg-[#1A1A1A] hover:bg-black text-white text-xs uppercase tracking-widest font-semibold px-8 py-4 border border-white/20 hover:border-white transition-all duration-300 inline-flex items-center gap-3">
                 SHOP NOW <ArrowRight className="w-4 h-4" />
               </button>
@@ -228,7 +228,7 @@ export default function AtelierPage() {
             </span>
             <h2 className="text-2xl sm:text-3xl font-serif text-[#1A1A1A] mt-1">Top categories</h2>
           </div>
-          <Link href="/category" className="text-xs uppercase tracking-widest text-[#1A1A1A] hover:text-[#666666] font-semibold flex items-center gap-1">
+          <Link href="/atelier/new-in" className="text-xs uppercase tracking-widest text-[#1A1A1A] hover:text-[#666666] font-semibold flex items-center gap-1">
             View all <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
@@ -260,7 +260,7 @@ export default function AtelierPage() {
             </span>
             <h2 className="text-2xl sm:text-3xl font-serif text-[#1A1A1A] mt-1">Best selling</h2>
           </div>
-          <Link href="/category" className="text-xs uppercase tracking-widest text-[#1A1A1A] hover:text-[#666666] font-semibold flex items-center gap-1">
+          <Link href="/atelier/new-in" className="text-xs uppercase tracking-widest text-[#1A1A1A] hover:text-[#666666] font-semibold flex items-center gap-1">
             Explore catalog <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
@@ -353,7 +353,6 @@ export default function AtelierPage() {
       <footer className="bg-[#FAF9F6] border-t border-[#EAE8E3] text-[#666666] text-xs py-16 px-6 sm:px-10">
         <div className="max-w-[1440px] mx-auto space-y-12">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            {/* Column 1 */}
             <div className="space-y-3">
               <Link href="/atelier" className="text-lg font-black tracking-widest uppercase text-[#1A1A1A] block">
                 ATELIER<span className="text-[#888888] font-normal">/</span>
@@ -363,7 +362,6 @@ export default function AtelierPage() {
               </p>
             </div>
 
-            {/* Column 2 */}
             <div className="space-y-3">
               <h4 className="text-xs font-bold uppercase tracking-wider text-[#1A1A1A]">Customer Care</h4>
               <ul className="space-y-2 text-[#666666]">
@@ -375,13 +373,14 @@ export default function AtelierPage() {
               </ul>
             </div>
 
-            {/* Column 3 */}
             <div className="space-y-3">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-[#1A1A1A]">Social</h4>
+              <h4 className="text-xs font-bold uppercase tracking-wider text-[#1A1A1A]">Categories</h4>
               <ul className="space-y-2 text-[#666666]">
-                <li><a href="https://instagram.com" target="_blank" rel="noreferrer" className="hover:text-[#1A1A1A] transition">Instagram</a></li>
-                <li><a href="https://facebook.com" target="_blank" rel="noreferrer" className="hover:text-[#1A1A1A] transition">Facebook</a></li>
-                <li><a href="https://twitter.com" target="_blank" rel="noreferrer" className="hover:text-[#1A1A1A] transition">Twitter / X</a></li>
+                <li><Link href="/atelier/men" className="hover:text-[#1A1A1A] transition">Men's Tailoring</Link></li>
+                <li><Link href="/atelier/women" className="hover:text-[#1A1A1A] transition">Women's Knitwear</Link></li>
+                <li><Link href="/atelier/footwear" className="hover:text-[#1A1A1A] transition">Italian Footwear</Link></li>
+                <li><Link href="/atelier/bags" className="hover:text-[#1A1A1A] transition">Leather Bags</Link></li>
+                <li><Link href="/atelier/accessories" className="hover:text-[#1A1A1A] transition">Timepieces & Accessories</Link></li>
               </ul>
             </div>
           </div>
@@ -393,7 +392,6 @@ export default function AtelierPage() {
         </div>
       </footer>
 
-      {/* Live Chat Support */}
       <LiveChatWidget />
     </div>
   );
